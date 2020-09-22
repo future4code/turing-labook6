@@ -25,8 +25,15 @@ export class UserRelationBusiness {
 
         const authenticator = new Authenticator();
         const userDb = authenticator.getData(token);
-        
+
         const userRelationDatabase = new UserRelationDatabase();
+        
+        const checkFriendship: void | any = await userRelationDatabase.checkFriendship(userDb.id, friendId);
+
+        if(!checkFriendship) {
+            throw new Error("Você não tem amizade com esse usuário.")
+        }
+
         await userRelationDatabase.brokenFriendship(userDb.id, friendId)
     }
 }

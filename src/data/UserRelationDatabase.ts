@@ -22,6 +22,24 @@ export class UserRelationDatabase extends BaseDatabase {
                 .into(UserRelationDatabase.TABLE_RELATIONS);
         };
 
+        public async checkFriendship(
+            userId: string,
+            friendId: string
+        ): Promise<void> {
+                const result = await this.getConnection()
+                    .select('*')
+                    .from(UserRelationDatabase.TABLE_RELATIONS)
+                    .where({
+                        userId,
+                        friendId
+                    })
+                    .or.where({
+                        userId: friendId,
+                        friendId: userId
+                    });
+                return result[0]
+        }
+
     public async brokenFriendship(
         userId: string,
         friendId: string
