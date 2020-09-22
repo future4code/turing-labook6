@@ -1,3 +1,4 @@
+import { UserRelationBusiness } from "../business/UserRelationBusiness";
 import { BaseDatabase } from "./BaseDatabase";
 
 export class UserRelationDatabase extends BaseDatabase {
@@ -19,7 +20,24 @@ export class UserRelationDatabase extends BaseDatabase {
                     }
                 ])
                 .into(UserRelationDatabase.TABLE_RELATIONS);
-        }
+        };
+
+    public async brokenFriendship(
+        userId: string,
+        friendId: string
+    ): Promise<void> {
+            await this.getConnection()
+                .delete()
+                .from(UserRelationDatabase.TABLE_RELATIONS)
+                .where({
+                    userId,
+                    friendId
+                })
+                .or.where({
+                    userId: friendId,
+                    friendId: userId
+                });
+    }
 
     
 }

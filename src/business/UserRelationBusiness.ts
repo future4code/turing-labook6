@@ -17,4 +17,16 @@ export class UserRelationBusiness {
         const userRelationDatabase = new UserRelationDatabase();
         await userRelationDatabase.creatFriendship(userDb.id, friendId)
     }
+
+    public async unFriendship(friendId: string, token: string): Promise<void> {
+        if(!friendId) {
+            throw new Error('Preencha todos os campos');
+        }
+
+        const authenticator = new Authenticator();
+        const userDb = authenticator.getData(token);
+        
+        const userRelationDatabase = new UserRelationDatabase();
+        await userRelationDatabase.brokenFriendship(userDb.id, friendId)
+    }
 }
