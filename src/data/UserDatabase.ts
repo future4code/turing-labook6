@@ -1,7 +1,13 @@
 import { BaseDatabase } from "./BaseDatabase";
 
+export enum POST_TYPE {
+    NORMAL = "NORMAL",
+    EVENT = "EVENT"
+  }
+
 export class UserDatabase extends BaseDatabase {
     private static TABLE_USERS: string = "UserLabook";
+    private static TABLE_POSTS: string = "Posts";
 
     public async createUser(
         id: string,
@@ -17,6 +23,29 @@ export class UserDatabase extends BaseDatabase {
                     email,
                     password
                 }).into(UserDatabase.TABLE_USERS)
+        } catch (error) {
+            throw new Error(error.sqlMessage || error.message)
+        }
+    }
+
+    public async createPost(
+        id: string,
+        photo: string,
+        description: string,
+        createAt: string,
+        type: POST_TYPE,
+        userId_labook: string
+    ): Promise<void> {
+        try {
+            await this.getConnection()
+                .insert({
+                    id,
+                    photo,
+                    description,
+                    createAt,
+                    type,
+                    userId_labook
+                }).into(UserDatabase.TABLE_POSTS)
         } catch (error) {
             throw new Error(error.sqlMessage || error.message)
         }
