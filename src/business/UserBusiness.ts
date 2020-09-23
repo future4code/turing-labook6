@@ -18,22 +18,18 @@ export class UserBusiness {
             throw new Error('Email inválido.');
         }
 
-        const idGenerator = new IdGenerator();
-        const id = idGenerator.generate();
+        const id = new IdGenerator().generate();
 
-        const hashManager = new HashManager();
-        const newPassword = await hashManager.hash(user.password);
+        const newPassword = await new HashManager().hash(user.password);
 
-        const userDatabase = new UserDatabase();
-        await userDatabase.createUser(
+        await new UserDatabase().createUser(
             id,
             user.name,
             user.email,
             newPassword
         );
 
-        const authenticator = new Authenticator();
-        const token = authenticator.generateToken({id});
+        const token = new Authenticator().generateToken({id});
         
         return token;
     }
@@ -43,18 +39,15 @@ export class UserBusiness {
             throw new Error("Preencha todos os dados")
         }
 
-        const userDatabase = new UserDatabase();
-        const userData = await userDatabase.getUserByEmail(user.email);
+        const userData = await new UserDatabase().getUserByEmail(user.email);
 
-        const hashManager = new HashManager();
-        const passwordCorrect = await hashManager.compare(user.password, userData.password);
+        const passwordCorrect = await new HashManager().compare(user.password, userData.password);
 
         if(!passwordCorrect) {
             throw new Error("Email ou senha incorreto")
         }
 
-        const authenticator = new Authenticator();
-        const token = authenticator.generateToken({id: userData.id});
+        const token = new Authenticator().generateToken({id: userData.id});
 
         return token
     }

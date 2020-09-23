@@ -1,4 +1,3 @@
-import { UserRelationBusiness } from "../business/UserRelationBusiness";
 import { BaseDatabase } from "./BaseDatabase";
 
 export class UserRelationDatabase extends BaseDatabase {
