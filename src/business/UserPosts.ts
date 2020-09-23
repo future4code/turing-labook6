@@ -32,4 +32,14 @@ export class UserPosts {
         )
 
     }
+
+    public async getFeedPosts(token: string): Promise<any>{
+        const userDb = new Authenticator().getData(token);
+
+        return await new UserDatabase().getFeedPosts(userDb.id);
+    }
+
+    public async getPostsType(type: string): Promise<any>{
+        return await new UserDatabase().getPostsType(type);
+    }
 }

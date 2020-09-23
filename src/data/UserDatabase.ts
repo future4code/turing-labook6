@@ -70,5 +70,31 @@ export class UserDatabase extends BaseDatabase {
             .where({ id })
         return result[0]
     }
+
+    public async getFeedPosts(userId: string): Promise<any> {
+        const result = await this.getConnection()
+            .raw(`
+                SELECT Posts.id, photo, description, createAt, Posts.userId_labook as AuthorId, UserLabook.name
+                FROM UserLabook
+                JOIN Posts on UserLabook.id = Posts.userId_labook
+                JOIN Friends on Posts.userId_labook = Friends.friendId
+                WHERE userId = "${userId}"
+                ORDER BY Posts.createAt DESC;
+            `)
+            
+            return result[0]
+    }
+
+    public async getPostsType(type: string): Promise<any> {
+        const result = await this.getConnection()
+            .raw(`
+                SELECT * FROM ${UserDatabase.TABLE_POSTS}
+                JOIN UserLabook on Posts.userId_labook = UserLabook.id
+                WHERE type LIKE "${type}"
+                ORDER BY createAt DESC;
+            `)
+
+            return result[0]
+    }
     
 }
