@@ -1,28 +1,21 @@
-import { UserRelationDatabase } from '../data/UserRelationDatabase';
-import { User } from '../model/User';
 import { Authenticator } from '../services/Authenticator';
-import { HashManager } from '../services/HashManager';
 import { IdGenerator } from '../services/IdGenerator';
 import { UserDatabase, POST_TYPE } from './../data/UserDatabase';
 import dayjs from 'dayjs';
 
-export class UserPosts {
+export class UserPostsBusiness {
     public async createPost(post: any, token: string): Promise<void> {
         if(!post.photo || !post.description) {
             throw new Error('Preencha todos os campos');
         }
 
-        const idGenerator = new IdGenerator();
-        const id = idGenerator.generate();
+        const id = new IdGenerator().generate();
 
-        const authenticator = new Authenticator();
-        const userDb = authenticator.getData(token);
-
-        const userDatabase = new UserDatabase();
+        const userDb = new Authenticator().getData(token);
 
         const data = dayjs().format("YYYY-MM-DD")
 
-        await userDatabase.createPost(
+        await new UserDatabase().createPost(
             id,
             post.photo,
             post.description,
